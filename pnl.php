@@ -80,7 +80,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
 .big{display:flex;justify-content:space-between;align-items:baseline;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:10px}
 .big b{font-size:20px;font-weight:800;color:var(--good)}
 .cap{color:var(--mut);font-size:12px;margin:4px 0 0}
-.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.bsbox{transition:border-color .15s ease}.bsbox:hover{border-color:#33406b}.pnl tbody tr:nth-child(even) td{background:#151b2c}.pnl tbody tr:nth-child(even) td:first-child{background:#151b2c}.pnl tbody tr:hover td{background:#1c2540}.pnl tbody tr:hover td:first-child{background:#1c2540}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
+.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.bsbox{transition:border-color .15s ease}.bsbox:hover{border-color:#33406b}.pnl tbody tr:nth-child(even) td{background:#151b2c}.pnl tbody tr:nth-child(even) td:first-child{background:#151b2c}.pnl tbody tr:hover td{background:#1c2540}.pnl tbody tr:hover td:first-child{background:#1c2540}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}.rtbar{display:inline-flex;align-items:center;gap:4px;position:relative}.rtbar button{background:var(--panel2);border:1px solid var(--line);color:var(--mut);width:32px;height:30px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0}.rtbar button:hover{color:var(--txt);border-color:#33406b}.rtbar svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.rtexp{position:relative}.rtmenu{display:none;position:absolute;right:0;top:34px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:170px;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.45)}.rtmenu.open{display:block}.rtmenu a{display:block;padding:8px 10px;color:var(--txt);text-decoration:none;font-size:13px;border-radius:7px}.rtmenu a:hover{background:var(--panel2)}.sechead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 12px}.sechead h2{margin:0}</style></head>
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
@@ -89,7 +89,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
 </header>
 <div class="wrap">
 
- <h2>P&amp;L mensual · últimos 12 meses + actual</h2>
+ <div class="sechead"><h2>P&amp;L mensual · últimos 12 meses + actual</h2><div class="rtbar" data-target="#tpnl" data-name="PL_KRATFEL" data-title="P&L mensual"><button data-act="email" title="Enviar por correo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></button><button data-act="print" title="Imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="13" width="12" height="8"/><path d="M6 17H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/></svg></button><span class="rtexp"><button data-act="export" title="Exportar"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg></button><div class="rtmenu"><a href="#" data-fmt="xlsx">Exportar a Excel</a><a href="#" data-fmt="pdf">Exportar a PDF</a><a href="#" data-fmt="csv">Exportar a CSV</a></div></span></div></div>
  <div class="card"><table class="pnl sortable" id="tpnl">
   <thead><tr>
    <th data-type="text">Categoría <span class="ar">↕</span></th>
@@ -113,9 +113,9 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
  </table></div>
  <p class="cap">Clic en cualquier título para ordenar. Excluye traspasos internos y retiros de reserva. Gasto en positivo.</p>
 
- <h2>Balance general</h2>
+ <div class="sechead"><h2>Balance general</h2><div class="rtbar" data-target="#balsec" data-name="Balance_KRATFEL" data-title="Balance general"><button data-act="email" title="Enviar por correo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></button><button data-act="print" title="Imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="13" width="12" height="8"/><path d="M6 17H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/></svg></button><span class="rtexp"><button data-act="export" title="Exportar"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg></button><div class="rtmenu"><a href="#" data-fmt="xlsx">Exportar a Excel</a><a href="#" data-fmt="pdf">Exportar a PDF</a><a href="#" data-fmt="csv">Exportar a CSV</a></div></span></div></div>
  <p class="cap" style="margin-bottom:12px">Al 26/06/2026 · Cetera a su valor real ($<?= number_format($cetera,0,'.',',') ?>, al <?= $ceteraFecha ?>); QBO lo tenía en $<?= number_format($qboCetera,0,'.',',') ?> (desactualizado). · Saldos acumulados del año fiscal en curso (reporte de QBO “as of” fin de año).</p>
- <div class="bsgrid">
+ <div class="bsgrid" id="balsec">
   <div class="bsbox">
    <table>
     <tr class="sec"><td colspan="2">Activos</td></tr>
@@ -169,4 +169,5 @@ function makeSortable(table){
 document.querySelectorAll('table.sortable').forEach(makeSortable);
 </script>
 <footer class="ftr">KRATFEL Finanzas · Datos de QuickBooks (gastos) y Cetera (reserva). Las proyecciones son estimaciones y no constituyen asesoría financiera.</footer>
+<script src="/assets/report_tools.js" defer></script>
 </body></html>
