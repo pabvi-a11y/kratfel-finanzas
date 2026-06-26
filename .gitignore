@@ -1,0 +1,19 @@
+# Secretos y entorno — NUNCA al repo
+.env
+*.key
+
+# Logs y temporales
+/logs/*.log
+/tmp/
+*.cache
+
+# Dependencias (si en el futuro se usa composer)
+/vendor/
+
+# Subidas de respaldo .xlsx
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+
+# Sistema
+.DS_Store
+Thumbs.db

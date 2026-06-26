@@ -1,0 +1,40 @@
+name: Deploy a SiteGround
+
+# Despliega al hacer push a main. NADA toca el Mac de Pablo.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar clave SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SG_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p "${{ secrets.SG_SSH_PORT }}" -H "${{ secrets.SG_SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Subir con rsync
+        run: |
+          rsync -az --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='.env' \
+            --exclude='storage/uploads/*' \
+            -e "ssh -i ~/.ssh/id_deploy -p ${{ secrets.SG_SSH_PORT }}" \
+            ./ \
+            "${{ secrets.SG_SSH_USER }}@${{ secrets.SG_SSH_HOST }}:${{ secrets.SG_DEPLOY_PATH }}"
+
+# Secrets a configurar en GitHub (Settings -> Secrets and variables -> Actions):
+#   SG_SSH_HOST    -> host SSH de SiteGround
+#   SG_SSH_PORT    -> puerto SSH (SiteGround suele usar 18765)
+#   SG_SSH_USER    -> usuario SSH
+#   SG_SSH_KEY     -> clave PRIVADA SSH (la pública se añade en SiteGround)
+#   SG_DEPLOY_PATH -> ruta del docroot del subdominio, p.ej. ~/www/finanzas.usuarioseri2y3.com/public_html
+# El .env real vive SOLO en el servidor (excluido del rsync), nunca en el repo.
