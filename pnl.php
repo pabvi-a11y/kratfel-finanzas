@@ -113,7 +113,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
  <p class="cap">Clic en cualquier título para ordenar. Excluye traspasos internos y retiros de reserva. Gasto en positivo.</p>
 
  <h2>Balance general</h2>
- <p class="cap" style="margin-bottom:12px">Al 26/06/2026 · Cetera a su valor real ($<?= number_format($cetera,0,'.',',') ?>, al <?= $ceteraFecha ?>); QBO lo tenía en $<?= number_format($qboCetera,0,'.',',') ?> (desactualizado).</p>
+ <p class="cap" style="margin-bottom:12px">Al 26/06/2026 · Cetera a su valor real ($<?= number_format($cetera,0,'.',',') ?>, al <?= $ceteraFecha ?>); QBO lo tenía en $<?= number_format($qboCetera,0,'.',',') ?> (desactualizado). · Saldos acumulados del año fiscal en curso (reporte de QBO “as of” fin de año).</p>
  <div class="bsgrid">
   <div class="bsbox">
    <table>
