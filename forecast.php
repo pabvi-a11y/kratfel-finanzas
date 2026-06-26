@@ -61,9 +61,9 @@ nav a.active{background:var(--panel2);color:var(--txt)}nav a:hover{color:var(--t
 .seg button.active{background:var(--acc);color:#fff}
 .muted{color:var(--mut);font-size:12.5px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;overflow-x:auto}
-table{width:auto;border-collapse:collapse;font-size:13px;min-width:0}
+table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:13px}
 th,td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums;white-space:nowrap}
-th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);min-width:230px}
+th:first-child,td:first-child{text-align:left;position:sticky;left:0;background:var(--panel);width:230px}
 thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.3px}
 .sect td{background:var(--panel2);color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.3px;font-weight:700}
 .tot td{font-weight:700;border-top:1px solid var(--line)}
@@ -153,7 +153,7 @@ function render(){
   h+='<tr class="tot"><td>Total gastos</td>'; c.exp.forEach(v=>h+='<td class="neg">'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="tot"><td>Flujo neto</td>'; c.net.forEach(v=>h+='<td class="'+(v<0?'neg':'pos')+'">'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="end"><td>Saldo final</td>'; c.ea.forEach(v=>h+='<td class="'+(v<=0?'zero':'pos')+'">'+fmt(v)+'</td>'); h+='</tr>';
-  h+='</tbody>'; document.getElementById('grid').innerHTML=h;
+  h+='</tbody>'; document.getElementById('grid').innerHTML=h; document.getElementById('grid').style.minWidth=(230+months*100)+'px';
   // binds
   document.getElementById('edStart').onchange=e=>{state.start=num(e.target.value);render();};
   const rs=document.getElementById('resetStart'); if(rs) rs.onclick=()=>{state.start=D.saldo; render();};
