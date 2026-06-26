@@ -74,7 +74,7 @@ input{background:#0e1322;border:1px solid var(--line);color:var(--txt);border-ra
 .btn{background:var(--acc);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
 </style></head>
 <body>
-<header><div class="brand">KRATFEL <span>· Finanzas</span></div>
+<header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
 <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="<?= APP_BASE_URL ?>/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
 
