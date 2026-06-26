@@ -57,7 +57,7 @@ td.v0{color:#444c6b}
 <body>
 <header>
  <div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px"> <span>· Finanzas</span></div>
- <nav><a href="/">Dashboard</a><a class="active" href="/pnl.php">P&amp;L</a><a href="/forecast.php">Forecast</a></nav>
+ <nav><a href="/">Dashboard</a><a class="active" href="/pnl.php">P&amp;L</a><a href="/forecast.php">Forecast</a><a href="/flujo.php">Flujo</a></nav>
  <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div>
 </header>
 <div class="wrap">
