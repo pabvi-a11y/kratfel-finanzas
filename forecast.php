@@ -103,6 +103,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 <script>
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt = n => (n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
+const nf = n => Math.round(n).toLocaleString('en-US');
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 let months=6, base='avg3';
 const sortDir={cat:1,ev:1};
@@ -124,26 +125,26 @@ function calc(){
   }
   return {labels,inc,exp,net,sa,ea,zi};
 }
-function num(v){return (+v||0);}
+function num(v){return parseFloat(String(v).replace(/,/g,''))||0;}
 function rowCat(arr,key,cat,idx){
   const badges='<div class="badges">'
-    +'<span class="badge '+(cat.mode==='avg3'?'on':'')+'" data-set="'+key+'" data-i="'+idx+'" data-to="avg3">3m '+fmt(cat.avg3)+'</span>'
-    +'<span class="badge '+(cat.mode==='last'?'on':'')+'" data-set="'+key+'" data-i="'+idx+'" data-to="last">Últ '+fmt(cat.last)+'</span>'
+    +'<span class="badge '+(cat.mode==='avg3'?'on':'')+'" data-set="'+key+'" data-i="'+idx+'" data-to="avg3" title="Usa el promedio de los últimos 3 meses para esta categoría">3m '+fmt(cat.avg3)+'</span>'
+    +'<span class="badge '+(cat.mode==='last'?'on':'')+'" data-set="'+key+'" data-i="'+idx+'" data-to="last" title="Usa el valor del último mes (más reciente) para esta categoría">Últ '+fmt(cat.last)+'</span>'
     +'</div>';
   let h='<tr><td><div class="catname">'+cat.n+'</div>'+badges+'</td>';
-  for(let i=0;i<months;i++) h+= i===0?'<td><input class="cell-edit" data-'+key+'="'+idx+'" value="'+Math.round(cat.v)+'"></td>':'<td>'+fmt(cat.v)+'</td>';
+  for(let i=0;i<months;i++) h+= i===0?'<td><input class="cell-edit" data-'+key+'="'+idx+'" value="'+nf(cat.v)+'"></td>':'<td>'+fmt(cat.v)+'</td>';
   return h+'</tr>';
 }
 function render(){
   const c=calc(); let h='<thead><tr><th>Concepto</th>';
   c.labels.forEach((l,i)=>h+='<th>'+l+(i===0?' · hoy':'')+'</th>'); h+='</tr></thead><tbody>';
   h+='<tr class="start"><td>Saldo inicial</td>';
-  c.sa.forEach((v,i)=>h+= i===0?'<td><input class="cell-edit" id="edStart" value="'+Math.round(v)+'"></td>':'<td>'+fmt(v)+'</td>'); h+='</tr>';
+  c.sa.forEach((v,i)=>h+= i===0?'<td><input class="cell-edit" id="edStart" value="'+nf(v)+'"></td>':'<td>'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="sect"><td>Ingresos</td>'+'<td></td>'.repeat(months)+'</tr>';
   h+='<tr><td>Ingreso mensual esperado</td>';
-  for(let i=0;i<months;i++) h+= i===0?'<td><input class="cell-edit" id="edIncome" value="'+state.income+'"></td>':'<td>'+fmt(state.income)+'</td>'; h+='</tr>';
+  for(let i=0;i<months;i++) h+= i===0?'<td><input class="cell-edit" id="edIncome" value="'+nf(state.income)+'"></td>':'<td>'+fmt(state.income)+'</td>'; h+='</tr>';
   h+='<tr><td>Orden puntual <span class="muted">(mes <input class="cell-edit" id="edOrderM" style="width:46px" value="'+state.order.month+'">)</span></td>';
-  for(let i=0;i<months;i++){const on=(i+1===+state.order.month);h+= i===0?'<td><input class="cell-edit" id="edOrderA" value="'+state.order.amount+'"></td>':'<td>'+(on?fmt(+state.order.amount):'—')+'</td>';} h+='</tr>';
+  for(let i=0;i<months;i++){const on=(i+1===+state.order.month);h+= i===0?'<td><input class="cell-edit" id="edOrderA" value="'+nf(state.order.amount)+'"></td>':'<td>'+(on?fmt(+state.order.amount):'—')+'</td>';} h+='</tr>';
   h+='<tr class="tot"><td>Total ingresos</td>'; c.inc.forEach(v=>h+='<td class="'+(v>0?'pos':'')+'">'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="sect"><td id="secCat" style="cursor:pointer">Gastos operativos <span style="opacity:.55">↕</span></td>'+'<td></td>'.repeat(months)+'</tr>';
   state.cats.forEach((cat,idx)=>h+=rowCat(state.cats,'cat',cat,idx));
