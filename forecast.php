@@ -138,7 +138,7 @@ function rowCat(arr,key,cat,idx){
 function render(){
   const c=calc(); let h='<thead><tr><th>Concepto</th>';
   c.labels.forEach((l,i)=>h+='<th>'+l+(i===0?' · hoy':'')+'</th>'); h+='</tr></thead><tbody>';
-  h+='<tr class="start"><td>Saldo inicial</td>';
+  h+='<tr class="start"><td>Saldo inicial<div class="badges"><span class="badge" id="resetStart" title="Volver al saldo real de Cetera de hoy">↺ Saldo actual '+fmt(D.saldo)+'</span></div></td>';
   c.sa.forEach((v,i)=>h+= i===0?'<td><input class="cell-edit" id="edStart" value="'+nf(v)+'"></td>':'<td>'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="sect"><td>Ingresos</td>'+'<td></td>'.repeat(months)+'</tr>';
   h+='<tr><td>Ingreso mensual esperado</td>';
@@ -156,6 +156,7 @@ function render(){
   h+='</tbody>'; document.getElementById('grid').innerHTML=h;
   // binds
   document.getElementById('edStart').onchange=e=>{state.start=num(e.target.value);render();};
+  const rs=document.getElementById('resetStart'); if(rs) rs.onclick=()=>{state.start=D.saldo; render();};
   document.getElementById('edIncome').onchange=e=>{state.income=num(e.target.value);render();};
   document.getElementById('edOrderA').onchange=e=>{state.order.amount=num(e.target.value);render();};
   document.getElementById('edOrderM').onchange=e=>{state.order.month=num(e.target.value);render();};
