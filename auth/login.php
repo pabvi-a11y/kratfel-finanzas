@@ -35,7 +35,7 @@ input{width:100%;box-sizing:border-box;margin:6px 0 14px;background:#0e1322;bord
 button{width:100%;background:#5b8cff;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:14px;cursor:pointer}
 .err{color:#ff6b6b;font-size:13px;margin-bottom:10px}</style></head>
 <body><form class="card" method="post">
-<h1><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:26px;vertical-align:middle"> · Finanzas</h1>
+<h1 style="display:flex;align-items:center;gap:7px;justify-content:center;flex-wrap:wrap"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:26px"> <span style="font-weight:400;color:#9aa6c7;font-size:15px">· Finanzas</span></h1>
 <?php if ($error): ?><div class="err"><?= htmlspecialchars($error) ?></div><?php endif; ?>
 <input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>">
 <label>Correo</label><input type="email" name="email" required autofocus>

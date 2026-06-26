@@ -51,7 +51,7 @@ $cls = !is_finite($ml) ? 'good' : ($ml < 3 ? 'bad' : ($ml < 6 ? 'warn' : 'good')
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
 header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line)}
-.brand{font-weight:800;font-size:18px}.brand span{color:var(--acc)}
+.brand{font-weight:800;font-size:18px;display:inline-flex;align-items:center;gap:7px}.brand span{color:var(--mut);font-weight:400;font-size:14px}
 .who{margin-left:auto;color:var(--mut);font-size:13px}.who a{color:var(--mut)}
 .wrap{max-width:1100px;margin:0 auto;padding:22px}
 .fresh{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;color:var(--mut)}
@@ -109,17 +109,6 @@ input{background:#0e1322;border:1px solid var(--line);color:var(--txt);border-ra
     <tr><td><?= $label ?></td><td class="num"><?= money($pnl[$k]['total']) ?></td></tr>
   <?php endforeach; if (!$pnl): ?><tr><td colspan="2" style="color:var(--mut)">Sin transacciones aún.</td></tr><?php endif; ?>
   </tbody></table>
-</div>
-
-<div class="card">
-  <h3>Actualizar saldo de Cetera</h3>
-  <p class="cap">Captúralo cada 2-3 días (AdviceWorks no tiene API). Es el ancla del runway.</p>
-  <form class="inline" method="post" action="<?= APP_BASE_URL ?>/saldo.php">
-    <input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>">
-    <div><div class="cap">Fecha</div><input type="date" name="fecha" value="<?= date('Y-m-d') ?>"></div>
-    <div><div class="cap">Saldo (USD)</div><input type="text" name="saldo" placeholder="245000"></div>
-    <button class="btn" type="submit">Guardar</button>
-  </form>
 </div>
 
 </div>
