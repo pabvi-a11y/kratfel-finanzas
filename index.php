@@ -94,6 +94,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
 const MESJS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const monthSep={id:'monthSep',beforeDatasetsDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;D.labels.forEach((l,i)=>{if(!l[1])return;const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.restore();}};
 const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte −20%',mult:.8,inc:0,im:0},{id:'c35',name:'Austeridad −35%',mult:.65,inc:0,im:0},{id:'ord',name:'Orden $120k (mes 3)',mult:1,inc:120000,im:3}];
 let cur='base';
 const scEl=document.getElementById('scen');
@@ -120,13 +121,13 @@ function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
   {type:'line',label:'Proyección',data:dotted,borderColor:'#9b6bff',borderDash:[6,5],yAxisID:'y1',pointRadius:0,borderWidth:2,tension:.15,order:2},
  ];
  if(chart)chart.destroy();
- chart=new Chart(document.getElementById('chart'),{data:{labels:D.labels,datasets:ds},options:{maintainAspectRatio:false,
+ chart=new Chart(document.getElementById('chart'),{data:{labels:D.labels,datasets:ds},plugins:[monthSep],options:{maintainAspectRatio:false,
   plugins:{legend:{display:false},tooltip:{callbacks:{title:items=>{const i=items[0].dataIndex;const l=D.labels[i];return 'Semana '+l[0]+(l[1]?' · '+l[1]:'');},label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},
   scales:{
    y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)},title:{display:true,text:'Semanal',color:'#9aa6c7'}},
    y1:{position:'right',grid:{display:false},ticks:{color:'#9b6bff',callback:v=>fmt(v)},title:{display:true,text:'Reserva',color:'#9b6bff'}},
-   x:{grid:{display:false},ticks:{color:'#9aa6c7',font:{size:8},autoSkip:false,maxRotation:0,minRotation:0,
-      callback:function(val,idx){const l=D.labels[idx];return l[1]? [String(l[0]), l[1]] : String(l[0]);}}}
+   x:{grid:{display:false},ticks:{color:'#9aa6c7',font:{size:10},autoSkip:false,maxRotation:0,minRotation:0,
+      callback:function(val,idx){const l=D.labels[idx];return l[1]?l[1]:'';}}}
   }}});
 }
 render();
