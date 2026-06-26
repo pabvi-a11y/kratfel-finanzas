@@ -15,7 +15,7 @@ $ok = ($conn && $conn['estado']==='conectado');
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--bad:#ff6b6b;--warn:#ffb454}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
 header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line)}
-.brand{font-weight:800;font-size:18px;display:inline-flex;align-items:center;gap:7px}.brand span{color:var(--mut);font-weight:400;font-size:14px}
+.brand{display:flex;flex-direction:column;gap:3px;text-decoration:none}.brand img{height:20px;display:block}.brand .tag{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);padding-left:2px}.hdiv{width:1px;height:26px;background:var(--line);flex:none}
 nav{display:flex;gap:6px;margin-left:8px}nav a{color:var(--mut);padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600}nav a:hover{color:var(--txt)}
 .who{margin-left:auto;color:var(--mut);font-size:13px}.who a{color:var(--mut)}.who a.act{color:var(--txt)}
 .wrap{max-width:720px;margin:0 auto;padding:22px}
@@ -31,7 +31,7 @@ h2{font-size:18px;margin:6px 0 14px}
 </style></head>
 <body>
 <header>
- <div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px"> <span>· Finanzas</span></div>
+ <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
  <nav><a href="/">Dashboard</a><a href="/pnl.php">Reportes</a><a href="/forecast.php">Forecast</a></nav>
  <div class="who"><?= htmlspecialchars($user['nombre']??$user['email']) ?> · <a class="act" href="/settings.php">Ajustes</a> · <a href="/auth/logout.php">Salir</a></div>
 </header>
