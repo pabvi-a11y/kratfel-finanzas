@@ -165,7 +165,7 @@ function render(){
 document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#seg button').forEach(x=>x.classList.remove('active'));b.classList.add('active');months=+b.dataset.m;render();});
 document.querySelectorAll('#base button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#base button').forEach(x=>x.classList.remove('active'));b.classList.add('active');base=b.dataset.b;
-  state.cats.forEach(c=>{c.v=c[base];c.mode=base;}); render();
+  state.cats.forEach(c=>{c.v=c[base];c.mode=base;}); state.eventos.forEach(c=>{c.v=c[base];c.mode=base;}); render();
 });
 render();
 </script>
