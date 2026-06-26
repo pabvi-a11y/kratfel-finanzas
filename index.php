@@ -74,7 +74,7 @@ td.num,th.num{text-align:right}th{color:var(--mut);font-size:11px;text-transform
 </style></head>
 <body>
 <header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
-<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540;padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">P&amp;L</a><a href="/forecast.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Forecast</a><a href="/flujo.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Flujo</a><a href="/balance.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Balance</a></nav>
+<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540;padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Reportes</a><a href="/forecast.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Forecast</a><a href="/flujo.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Flujo</a></nav>
 <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
 <?php if(!$hayDatos): ?><div class="banner"><b>Sin datos todavía.</b> Conecta QuickBooks o sube el .xlsx, y captura el saldo de Cetera.</div><?php endif; ?>
@@ -96,22 +96,18 @@ td.num,th.num{text-align:right}th{color:var(--mut);font-size:11px;text-transform
   <div style="height:320px"><canvas id="chart"></canvas></div>
   <div class="legend"><span><i></i>Reserva (real)</span><span><i class="d"></i>Proyección</span></div>
 </div>
-<div class="card">
-  <h3>P&amp;L por grupo · últimos 6 meses</h3>
-  <table><thead><tr><th>Grupo</th><th class="num">Importe</th></tr></thead><tbody>
-  <?php foreach($GRP as $k=>$label): if(!isset($pnl[$k])) continue; ?><tr><td><?= $label ?></td><td class="num"><?= money($pnl[$k]['total']) ?></td></tr><?php endforeach; if(!$pnl): ?><tr><td colspan="2" style="color:var(--mut)">Sin transacciones aún.</td></tr><?php endif; ?>
-  </tbody></table>
-</div>
+
 </div>
 <script>
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
+const MESJS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte −20%',mult:.8,inc:0,im:0},{id:'c35',name:'Austeridad −35%',mult:.65,inc:0,im:0},{id:'ord',name:'Orden $120k (mes 3)',mult:1,inc:120000,im:3}];
 let cur='base';
 const scEl=document.getElementById('scen');
 scen.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;if(s.id==='base')b.classList.add('active');b.onclick=()=>{cur=s.id;[...scEl.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};scEl.appendChild(b);});
 function project(s){const v=D.vel*s.mult;let bal=D.saldo;const lbl=['hoy'],val=[Math.round(bal)];let cero=null,b2=bal,ml=0;
- for(let i=1;i<=12;i++){if(i===s.im&&s.inc)bal+=s.inc;bal-=v;const d=new Date(new Date().getFullYear(),(new Date().getMonth())+i,1);lbl.push(String(d.getFullYear()%100).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'));val.push(Math.round(bal));if(bal<=0&&cero===null)cero=lbl[i];}
+ for(let i=1;i<=12;i++){if(i===s.im&&s.inc)bal+=s.inc;bal-=v;const d=new Date(new Date().getFullYear(),(new Date().getMonth())+i,1);lbl.push(MESJS[d.getMonth()]+' '+String(d.getFullYear()%100));val.push(Math.round(bal));if(bal<=0&&cero===null)cero=lbl[i];}
  for(let i=1;i<=600;i++){if(i===s.im&&s.inc)b2+=s.inc;if(v<=0){ml=Infinity;break;}if(b2-v<=0){ml=(i-1)+(b2/v);break;}b2-=v;ml=i;}
  return {v,lbl,val,cero,ml};}
 let chart;
