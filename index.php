@@ -121,7 +121,7 @@ let cur='base';
 const scEl=document.getElementById('scen');
 scen.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;if(s.id==='base')b.classList.add('active');b.onclick=()=>{cur=s.id;[...scEl.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};scEl.appendChild(b);});
 function project(s){const v=D.vel*s.mult;let bal=D.serie[0].saldo;const lbl=['hoy'],val=[bal];let cero=null,b2=bal,ml=0;
- for(let i=1;i<=12;i++){if(i===s.im&&s.inc)bal+=s.inc;bal-=v;const d=new Date(2000,(new Date().getMonth())+i,1);lbl.push(String(d.getFullYear()%100).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'));val.push(Math.round(bal));if(bal<=0&&cero===null)cero=lbl[i];}
+ for(let i=1;i<=12;i++){if(i===s.im&&s.inc)bal+=s.inc;bal-=v;const d=new Date(new Date().getFullYear(),(new Date().getMonth())+i,1);lbl.push(String(d.getFullYear()%100).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0'));val.push(Math.round(bal));if(bal<=0&&cero===null)cero=lbl[i];}
  for(let i=1;i<=600;i++){if(i===s.im&&s.inc)b2+=s.inc;if(v<=0){ml=Infinity;break;}if(b2-v<=0){ml=(i-1)+(b2/v);break;}b2-=v;ml=i;}
  return {v,lbl,val,cero,ml};}
 let chart;
