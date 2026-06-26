@@ -42,7 +42,8 @@ $eventos=[
 $data=['saldo'=>$saldo,'asof'=>$asof,'cats'=>$cats,'eventos'=>$eventos,'mes0'=>(int)date('n'),'anio0'=>(int)date('Y')];
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Forecast — KRATFEL Finanzas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/assets/favicon.png"><title>Forecast — KRATFEL Finanzas</title>
 <style>
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b;--yellow:#3a3520;--yellowbd:#7a6a2a}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
@@ -78,7 +79,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 .zero{color:var(--bad);font-weight:700}
 .legend{margin-top:10px;color:var(--mut);font-size:12px}.legend b{color:#ffe39a}
 .catname{font-weight:600}
-</style></head>
+.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
@@ -169,4 +170,5 @@ document.querySelectorAll('#base button').forEach(b=>b.onclick=()=>{
 });
 render();
 </script>
+<footer class="ftr">KRATFEL Finanzas · Datos de QuickBooks (gastos) y Cetera (reserva). Las proyecciones son estimaciones y no constituyen asesoría financiera.</footer>
 </body></html>

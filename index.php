@@ -40,7 +40,8 @@ $ml=$proj['meses_restantes']; $mlTxt=is_finite($ml)?number_format($ml,1,'.',',')
 $cls=!is_finite($ml)?'good':($ml<3?'bad':($ml<6?'warn':'good'));
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>KRATFEL · Finanzas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/assets/favicon.png"><title>KRATFEL · Finanzas</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b;--violet:#9b6bff}
@@ -48,7 +49,7 @@ $cls=!is_finite($ml)?'good':($ml<3?'bad':($ml<6?'warn':'good'));
 header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line)}
 .brand{display:flex;flex-direction:column;gap:3px;text-decoration:none}.brand img{height:20px;display:block}.brand .tag{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut);padding-left:2px}.hdiv{width:1px;height:26px;background:var(--line);flex:none}
 .who{margin-left:auto;color:var(--mut);font-size:13px}.who a{color:var(--mut)}
-.wrap{max-width:1180px;margin:0 auto;padding:22px}
+.wrap{max-width:1200px;margin:0 auto;padding:22px}
 .fresh{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;color:var(--mut)}
 .chip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--good)}.dot.w{background:var(--warn)}.dot.b{background:var(--bad)}
@@ -65,7 +66,7 @@ header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:6px}
 .legend i.l{height:0;width:18px;border-top:3px solid var(--violet);border-radius:0}.legend i.d{height:0;width:18px;border-top:3px dashed var(--violet);border-radius:0}
 nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600}
-</style></head>
+.kpi{border-top:3px solid var(--acc);transition:transform .12s ease,border-color .12s ease}.kpi.good{border-top-color:var(--good)}.kpi.warn{border-top-color:var(--warn)}.kpi.bad{border-top-color:var(--bad)}.kpi:hover{transform:translateY(-2px)}.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
 <body>
 <header><a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
 <nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Forecast</a></nav>
@@ -92,7 +93,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const MESJS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-const monthSep={id:'monthSep',afterDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;const starts=[];D.labels.forEach((l,i)=>{if(l[1])starts.push(i);});ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;starts.forEach(i=>{const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.fillStyle='#9aa6c7';ctx.font='10px -apple-system,Segoe UI,sans-serif';ctx.textAlign='center';ctx.textBaseline='top';for(let k=0;k<starts.length;k++){const i=starts[k];const left=x.getPixelForValue(i)-half;const right=(k+1<starts.length)?x.getPixelForValue(starts[k+1])-half:a.right;if(right-left<26)continue;ctx.fillText(D.labels[i][1],(left+right)/2,a.bottom+8);}ctx.restore();}};
+const monthSep={id:'monthSep',afterDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;const starts=[];D.labels.forEach((l,i)=>{if(l[1])starts.push(i);});ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;starts.forEach(i=>{const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.fillStyle='#9aa6c7';ctx.font='10px -apple-system,Segoe UI,sans-serif';ctx.textAlign='center';ctx.textBaseline='top';for(let k=0;k<starts.length;k++){const i=starts[k];const left=x.getPixelForValue(i)-half;const right=(k+1<starts.length)?x.getPixelForValue(starts[k+1])-half:a.right;if(right-left<26)continue;ctx.fillText(D.labels[i][1],(left+right)/2,a.bottom+8);}const hx=x.getPixelForValue(D.histW-1);ctx.setLineDash([4,3]);ctx.strokeStyle='rgba(123,162,255,.75)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(hx,a.top);ctx.lineTo(hx,a.bottom);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#7aa2ff';ctx.font='bold 10px sans-serif';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText('hoy',hx,a.top+2);ctx.restore();}};
 const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte −20%',mult:.8,inc:0,im:0},{id:'c35',name:'Austeridad −35%',mult:.65,inc:0,im:0},{id:'ord',name:'Orden $120k (mes 3)',mult:1,inc:120000,im:3}];
 let cur='base';
 const scEl=document.getElementById('scen');
@@ -104,7 +105,7 @@ function monthly(s){const v=D.vel*s.mult;let b=D.saldo,ml=0,cero=null;
 // proyección semanal de la reserva
 function weeklyForward(s){const vw=D.velWeek*s.mult;const arr=Array(D.totW).fill(null);let bal=D.saldo;arr[D.histW-1]=Math.round(bal);
  const ordWeek=D.histW-1+Math.round(s.im*4.345);
- for(let k=D.histW;k<D.totW;k++){ if(k===ordWeek&&s.inc)bal+=s.inc; bal-=vw; arr[k]=Math.round(bal);} return arr;}
+ for(let k=D.histW;k<D.totW;k++){ if(k===ordWeek&&s.inc)bal+=s.inc; bal-=vw; if(bal<=0){arr[k]=0;break;} arr[k]=Math.round(bal);} return arr;}
 let chart;
 function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
  document.getElementById('kVel').textContent=fmt(mo.v);
@@ -130,4 +131,5 @@ function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
 }
 render();
 </script>
+<footer class="ftr">KRATFEL Finanzas · Datos de QuickBooks (gastos) y Cetera (reserva). Las proyecciones son estimaciones y no constituyen asesoría financiera.</footer>
 </body></html>

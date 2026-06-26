@@ -46,7 +46,8 @@ $patrimonio=$activoTotal-$pasivoTotal;
 function m2($n){$n=(float)$n;return ($n<0?'-':'').'$'.number_format(abs($n),2,'.',',');}
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Reportes — KRATFEL Finanzas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/assets/favicon.png"><title>Reportes — KRATFEL Finanzas</title>
 <style>
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--bad:#ff6b6b;--warn:#ffb454}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
@@ -55,7 +56,7 @@ header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:
 nav{display:flex;gap:6px;margin-left:8px}nav a{color:var(--mut);padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600}
 nav a.active{background:var(--panel2);color:var(--txt)}nav a:hover{color:var(--txt)}
 .who{margin-left:auto;color:var(--mut);font-size:13px}.who a{color:var(--mut)}
-.wrap{max-width:1300px;margin:0 auto;padding:22px}
+.wrap{max-width:1200px;margin:0 auto;padding:22px}
 h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;overflow-x:auto}
 .pnl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:1000px}
@@ -79,7 +80,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
 .big{display:flex;justify-content:space-between;align-items:baseline;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:10px}
 .big b{font-size:20px;font-weight:800;color:var(--good)}
 .cap{color:var(--mut);font-size:12px;margin:4px 0 0}
-</style></head>
+.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.bsbox{transition:border-color .15s ease}.bsbox:hover{border-color:#33406b}.pnl tbody tr:nth-child(even) td{background:#151b2c}.pnl tbody tr:nth-child(even) td:first-child{background:#151b2c}.pnl tbody tr:hover td{background:#1c2540}.pnl tbody tr:hover td:first-child{background:#1c2540}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
@@ -167,4 +168,5 @@ function makeSortable(table){
 }
 document.querySelectorAll('table.sortable').forEach(makeSortable);
 </script>
+<footer class="ftr">KRATFEL Finanzas · Datos de QuickBooks (gastos) y Cetera (reserva). Las proyecciones son estimaciones y no constituyen asesoría financiera.</footer>
 </body></html>

@@ -27,7 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $csrf = csrf_token();
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><title>Entrar — KRATFEL Finanzas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="/assets/favicon.png"><title>Entrar — KRATFEL Finanzas</title>
 <style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0f1320;color:#e8ecf7;display:flex;min-height:100vh;align-items:center;justify-content:center}
 .card{background:#171c2e;border:1px solid #2a3252;border-radius:14px;padding:28px;width:320px}
 h1{font-size:18px;margin:0 0 18px}label{font-size:12.5px;color:#9aa6c7}
@@ -35,7 +36,7 @@ input{width:100%;box-sizing:border-box;margin:6px 0 14px;background:#0e1322;bord
 button{width:100%;background:#5b8cff;color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:14px;cursor:pointer}
 .err{color:#ff6b6b;font-size:13px;margin-bottom:10px}</style></head>
 <body><form class="card" method="post">
-<h1 style="display:flex;align-items:center;gap:7px;justify-content:center;flex-wrap:wrap"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:26px"> <span style="font-weight:400;color:#9aa6c7;font-size:15px">· Finanzas</span></h1>
+<div style="display:flex;flex-direction:column;align-items:center;gap:5px;margin:0 0 22px"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:26px"><span style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#9aa6c7">Finanzas</span></div>
 <?php if ($error): ?><div class="err"><?= htmlspecialchars($error) ?></div><?php endif; ?>
 <input type="hidden" name="csrf" value="<?= htmlspecialchars($csrf) ?>">
 <label>Correo</label><input type="email" name="email" required autofocus>
