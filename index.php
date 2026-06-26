@@ -5,7 +5,7 @@ require_once __DIR__ . '/lib/auth.php';
 require_once __DIR__ . '/lib/runway.php';
 $user = require_login();
 
-$vel = rw_velocidad(6);
+$vel = rw_velocidad(3);
 $saldoRow = rw_saldo_actual();
 $saldo = $saldoRow ? (float)$saldoRow['saldo'] : 0.0;
 $asof = $saldoRow ? date('d/m/Y', strtotime($saldoRow['fecha'])) : '—';
@@ -77,13 +77,13 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 </div>
 <div class="kpis">
   <div class="kpi"><div class="lbl">Reserva Cetera hoy</div><div class="val"><?= money($saldo) ?></div></div>
-  <div class="kpi"><div class="lbl">Consumo mensual</div><div class="val" id="kVel"><?= money($vel['velocidad']) ?></div></div>
+  <div class="kpi"><div class="lbl">Consumo mensual</div><div class="val" id="kVel"><?= money($vel['velocidad']) ?></div><div style="color:var(--mut);font-size:11px;margin-top:4px">prom. últimos 3 meses · retiros de reserva</div></div>
   <div class="kpi <?= $cls ?>"><div class="lbl">Meses restantes</div><div class="val" id="kMeses"><?= $mlTxt ?></div></div>
   <div class="kpi <?= $cls ?>"><div class="lbl">Fecha estimada de cero</div><div class="val" id="kCero"><?= htmlspecialchars($proj['fecha_cero']??'—') ?></div></div>
 </div>
 <div class="card">
   <h3>Egresos, retiro de reserva y proyección · por semana</h3>
-  <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Las líneas verticales separan los meses. Cambia el escenario para mover la fecha de cero.</p>
+  <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Las líneas verticales separan los meses. La proyección parte del consumo promedio de los <b>últimos 3 meses</b> de retiros de reserva (más conservador que 6 meses). Cambia el escenario para mover la fecha de cero.</p>
   <div class="scen" id="scen"></div>
   <div style="height:380px"><canvas id="chart"></canvas></div>
   <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva</span><span><i class="l"></i>Reserva real</span><span><i class="d"></i>Proyección</span></div>
