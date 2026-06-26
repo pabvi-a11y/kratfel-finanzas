@@ -61,7 +61,7 @@ h2{font-size:18px;margin:6px 0 14px}
  <div class="card">
   <h3>Reserva (Cetera)</h3>
   <div class="kv">
-   <div>Saldo actual</div><div><b><?= $sr? '$'.number_format((float)$sr['saldo'],2,',','.') : '—' ?></b></div>
+   <div>Saldo actual</div><div><b><?= $sr? '$'.number_format((float)$sr['saldo'],2,'.',',') : '—' ?></b></div>
    <div>Capturado al</div><div><?= $sr? date('d/m/Y', strtotime($sr['fecha'])) : '—' ?></div>
   </div>
   <p class="cap">Cetera/AdviceWorks no tiene API; el saldo lo actualiza el administrador con el valor real de la cuenta.</p>

@@ -88,7 +88,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 <div class="wrap">
  <div class="toolbar">
    <h2>Forecast de reserva</h2>
-   <span class="muted">Reserva Cetera hoy: <b><?= '$'.number_format($saldo,0,',','.') ?></b> · al <?= $asof ?></span>
+   <span class="muted">Reserva Cetera hoy: <b><?= '$'.number_format($saldo,0,'.',',') ?></b> · al <?= $asof ?></span>
    <div style="margin-left:auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
      <span class="muted">Base de gasto:</span>
      <div class="seg" id="base"><button data-b="avg3" class="active">Prom 3 meses</button><button data-b="last">Último mes</button></div>
@@ -100,7 +100,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 </div>
 <script>
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
-const fmt = n => (n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
+const fmt = n => (n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 let months=6, base='avg3';
 let state={

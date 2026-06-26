@@ -35,8 +35,8 @@ for($j=$histW-2;$j>=0;$j--){ $resH[$j]=$resH[$j+1]+($dr[$j+1]??0); }
 $conn = db()->query("SELECT estado, ultima_sync FROM qbo_oauth ORDER BY id DESC LIMIT 1")->fetch();
 $data=['saldo'=>$saldo,'vel'=>$vel['velocidad'],'velWeek'=>$vel['velocidad']/4.345,
   'histW'=>$histW,'totW'=>$totW,'labels'=>$labels,'eg'=>$eg,'dr'=>$dr,'resH'=>array_map(fn($v)=>round($v),$resH)];
-function money($n){ return '$'.number_format((float)$n,0,',','.'); }
-$ml=$proj['meses_restantes']; $mlTxt=is_finite($ml)?number_format($ml,1,',','.'):'∞';
+function money($n){ return '$'.number_format((float)$n,0,'.',','); }
+$ml=$proj['meses_restantes']; $mlTxt=is_finite($ml)?number_format($ml,1,'.',','):'∞';
 $cls=!is_finite($ml)?'good':($ml<3?'bad':($ml<6?'warn':'good'));
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
@@ -90,7 +90,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 </div>
 <script>
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
-const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
+const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const MESJS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 const monthSep={id:'monthSep',afterDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;const starts=[];D.labels.forEach((l,i)=>{if(l[1])starts.push(i);});ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;starts.forEach(i=>{const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.fillStyle='#9aa6c7';ctx.font='10px -apple-system,Segoe UI,sans-serif';ctx.textAlign='center';ctx.textBaseline='top';for(let k=0;k<starts.length;k++){const i=starts[k];const left=x.getPixelForValue(i)-half;const right=(k+1<starts.length)?x.getPixelForValue(starts[k+1])-half:a.right;if(right-left<26)continue;ctx.fillText(D.labels[i][1],(left+right)/2,a.bottom+8);}ctx.restore();}};
 const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte −20%',mult:.8,inc:0,im:0},{id:'c35',name:'Austeridad −35%',mult:.65,inc:0,im:0},{id:'ord',name:'Orden $120k (mes 3)',mult:1,inc:120000,im:3}];

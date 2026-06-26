@@ -25,7 +25,7 @@ usort($rows, fn($a,$b)=>$b['total']<=>$a['total']);
 $grand=array_sum($colTot);
 $MES=['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 function lbl($ym){global $MES;[$y,$m]=explode('-',$ym);return $MES[(int)$m].' '.substr($y,2);}
-function f($n){$n=round((float)$n);return ($n<0?'-':'').'$'.number_format(abs($n),0,',','.');}
+function f($n){$n=round((float)$n);return ($n<0?'-':'').'$'.number_format(abs($n),0,'.',',');}
 $curM=(new DateTime('first day of this month'))->format('Y-m');
 
 /* ---------- Balance ---------- */
@@ -43,7 +43,7 @@ foreach($cards as $r){ $c=$r['cuenta'];
 $activoTotal=$cetera; foreach($bs as $r){ if($r['seccion']==='activo')$activoTotal+=(float)$r['monto']; }
 $pasivoTotal=0; foreach($cards as $r)$pasivoTotal+=(float)$r['monto'];
 $patrimonio=$activoTotal-$pasivoTotal;
-function m2($n){$n=(float)$n;return ($n<0?'-':'').'$'.number_format(abs($n),2,',','.');}
+function m2($n){$n=(float)$n;return ($n<0?'-':'').'$'.number_format(abs($n),2,'.',',');}
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>Reportes — KRATFEL Finanzas</title>
@@ -113,7 +113,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
  <p class="cap">Clic en cualquier título para ordenar. Excluye traspasos internos y retiros de reserva. Gasto en positivo.</p>
 
  <h2>Balance general</h2>
- <p class="cap" style="margin-bottom:12px">Al 26/06/2026 · Cetera a su valor real ($<?= number_format($cetera,0,',','.') ?>, al <?= $ceteraFecha ?>); QBO lo tenía en $<?= number_format($qboCetera,0,',','.') ?> (desactualizado).</p>
+ <p class="cap" style="margin-bottom:12px">Al 26/06/2026 · Cetera a su valor real ($<?= number_format($cetera,0,'.',',') ?>, al <?= $ceteraFecha ?>); QBO lo tenía en $<?= number_format($qboCetera,0,'.',',') ?> (desactualizado).</p>
  <div class="bsgrid">
   <div class="bsbox">
    <table>
