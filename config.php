@@ -9,8 +9,9 @@ declare(strict_types=1);
 
 // Carga simple de .env si existe (en local). En SiteGround puedes usar variables del sistema.
 (function () {
-    $envFile = __DIR__ . '/.env';
-    if (is_readable($envFile)) {
+    // Busca .env primero FUERA del webroot (seguro), luego dentro (fallback local).
+    foreach ([dirname(__DIR__) . '/.env', __DIR__ . '/.env'] as $envFile) {
+        if (!is_readable($envFile)) continue;
         foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
             if ($line === '' || $line[0] === '#') continue;
             if (!str_contains($line, '=')) continue;
@@ -21,6 +22,7 @@ declare(strict_types=1);
                 $_ENV[$k] = $v;
             }
         }
+        break;
     }
 })();
 

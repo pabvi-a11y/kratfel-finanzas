@@ -1,0 +1,15 @@
+# Seguridad básica (Apache / SiteGround)
+# Bloquea acceso directo a archivos sensibles
+<FilesMatch "(^\.|\.env|\.sql|\.md|composer\.(json|lock))$">
+    Require all denied
+</FilesMatch>
+
+# Bloquea listados de directorio
+Options -Indexes
+
+# Fuerza HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
