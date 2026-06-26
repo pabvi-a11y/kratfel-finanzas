@@ -125,7 +125,7 @@ function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
    y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)},title:{display:true,text:'Semanal',color:'#9aa6c7'}},
    y1:{position:'right',grid:{display:false},ticks:{color:'#9b6bff',callback:v=>fmt(v)},title:{display:true,text:'Reserva',color:'#9b6bff'}},
    x:{grid:{display:false},ticks:{color:'#9aa6c7',font:{size:10},autoSkip:false,maxRotation:0,minRotation:0,
-      callback:function(val,idx){const l=D.labels[idx];return l[1]?l[1]:'';}}}
+      callback:function(){return '';}}}
   }}});
 }
 render();
