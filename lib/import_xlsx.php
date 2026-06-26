@@ -101,7 +101,9 @@ function xlsx_import_qbo(string $path): array {
         $cuenta = trim($r[$cAcct] ?? '');
         $split = trim($r[$cSplit] ?? '');
         if ($cuenta === '' || $split === '') continue;
-        $fecha = date('Y-m-d', strtotime(str_replace('/', '-', $fechaRaw)));
+        $ts = strtotime($fechaRaw);
+        if ($ts === false) continue;
+        $fecha = date('Y-m-d', $ts);
         $n = nz_row([
             'fecha' => $fecha,
             'descripcion' => trim($r[$cDesc] ?? ''),
