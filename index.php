@@ -66,7 +66,7 @@ header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:6px}
 .legend i.l{height:0;width:18px;border-top:3px solid var(--violet);border-radius:0}.legend i.d{height:0;width:18px;border-top:3px dashed var(--violet);border-radius:0}
 nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600}
-.kpi{border-top:3px solid var(--acc);transition:transform .12s ease,border-color .12s ease}.kpi.good{border-top-color:var(--good)}.kpi.warn{border-top-color:var(--warn)}.kpi.bad{border-top-color:var(--bad)}.kpi:hover{transform:translateY(-2px)}.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
+.kpi{border-top:3px solid var(--acc);transition:transform .12s ease,border-color .12s ease}.kpi.good{border-top-color:var(--good)}.kpi.warn{border-top-color:var(--warn)}.kpi.bad{border-top-color:var(--bad)}.kpi:hover{transform:translateY(-2px)}.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:1200px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}@media(max-width:680px){header{flex-wrap:wrap;gap:8px 10px;padding:10px 14px}.hdiv{display:none}nav{order:3;width:100%;overflow-x:auto;gap:3px}nav a{padding:7px 10px}.who{order:2;font-size:12px;margin-left:auto}.wrap{padding:16px 12px}.kpis{grid-template-columns:repeat(2,1fr);gap:10px}.kpi .val{font-size:21px}.sechead{flex-wrap:wrap;gap:8px}.bsgrid{grid-template-columns:1fr}.toolbar{gap:10px}h2{font-size:16px}}</style></head>
 <body>
 <header><a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
 <nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Proyección</a></nav>
@@ -85,7 +85,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
   <h3>Egresos, retiro de reserva y proyección · por semana</h3>
   <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Las líneas verticales separan los meses. La proyección parte del consumo promedio de los <b>últimos 3 meses</b> de retiros de reserva (más conservador que 6 meses). Cambia el escenario para mover la fecha de cero.</p>
   <div class="scen" id="scen"></div>
-  <div style="height:380px"><canvas id="chart"></canvas></div>
+  <div style="overflow-x:auto"><div style="min-width:700px;height:380px"><canvas id="chart"></canvas></div></div>
   <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva</span><span><i class="l"></i>Reserva real</span><span><i class="d"></i>Proyección</span></div>
 </div>
 </div>

@@ -29,7 +29,7 @@ h2{font-size:18px;margin:6px 0 14px}
 .btn{background:var(--acc);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block}
 .btn.ghost{background:var(--panel2);color:var(--txt);border:1px solid var(--line)}
 .cap{color:var(--mut);font-size:12.5px;margin-top:8px}
-.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:720px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}</style></head>
+.card{transition:border-color .15s ease}.card:hover{border-color:#33406b}.ftr{max-width:720px;margin:0 auto;padding:6px 22px 30px;color:var(--mut);font-size:11px;opacity:.6}@media(max-width:680px){header{flex-wrap:wrap;gap:8px 10px;padding:10px 14px}.hdiv{display:none}nav{order:3;width:100%;overflow-x:auto;gap:3px}nav a{padding:7px 10px}.who{order:2;font-size:12px;margin-left:auto}.wrap{padding:16px 12px}.kpis{grid-template-columns:repeat(2,1fr);gap:10px}.kpi .val{font-size:21px}.sechead{flex-wrap:wrap;gap:8px}.bsgrid{grid-template-columns:1fr}.toolbar{gap:10px}h2{font-size:16px}}</style></head>
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
