@@ -75,6 +75,7 @@ input{background:#0e1322;border:1px solid var(--line);color:var(--txt);border-ra
 </style></head>
 <body>
 <header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
+<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540;padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">P&amp;L</a><a href="/forecast.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Forecast</a></nav>
 <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="<?= APP_BASE_URL ?>/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
 
