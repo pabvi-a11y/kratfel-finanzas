@@ -68,7 +68,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 </style></head>
 <body>
 <header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
-<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Forecast</a><a href="/flujo.php" style="color:#9aa6c7">Flujo</a></nav>
+<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Forecast</a></nav>
 <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
 <div class="fresh">
@@ -84,7 +84,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 </div>
 <div class="card">
   <h3>Egresos, retiro de reserva y proyección · por semana</h3>
-  <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Arriba el nº de semana; abajo el mes (MM/AA). Cambia el escenario para mover la fecha de cero.</p>
+  <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Las líneas verticales separan los meses. Cambia el escenario para mover la fecha de cero.</p>
   <div class="scen" id="scen"></div>
   <div style="height:380px"><canvas id="chart"></canvas></div>
   <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva</span><span><i class="l"></i>Reserva real</span><span><i class="d"></i>Proyección</span></div>
