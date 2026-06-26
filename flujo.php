@@ -78,7 +78,7 @@ h2{font-size:18px;margin:0 0 4px}.cap{color:var(--mut);font-size:12.5px;margin:0
  </div>
  <div class="card">
    <div style="height:380px"><canvas id="ch"></canvas></div>
-   <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva (traspaso)</span><span><i style="background:#5b8cff"></i>Ingresos (ventas)</span><span><i class="l"></i>Reserva (saldo, eje der.)</span></div>
+   <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva (traspaso)</span><span><i style="background:#5b8cff"></i>Ingresos (ventas)</span><span><i class="l" style="border-color:#9b6bff"></i>Reserva (saldo, eje der.)</span></div>
  </div>
 </div>
 <script>
@@ -92,12 +92,12 @@ new Chart(document.getElementById('ch'),{
    {type:'bar',label:'Egresos operativos',data:D.egresos,backgroundColor:'#ff6b6b',yAxisID:'y',order:2},
    {type:'bar',label:'Retiro de reserva (traspaso)',data:D.aporte,backgroundColor:'#64748b',yAxisID:'y',order:2},
    {type:'bar',label:'Ingresos (ventas)',data:D.ingresos,backgroundColor:'#5b8cff',yAxisID:'y',order:2},
-   {type:'line',label:'Reserva (saldo)',data:D.reserva,borderColor:'#ffb454',backgroundColor:'#ffb454',yAxisID:'y1',tension:.2,pointRadius:2,order:1},
+   {type:'line',label:'Reserva (saldo)',data:D.reserva,borderColor:'#9b6bff',backgroundColor:'#9b6bff',yAxisID:'y1',tension:.2,pointRadius:2,order:1},
  ]},
  options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},
   scales:{
    y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)},title:{display:true,text:'Mensual',color:'#9aa6c7'}},
-   y1:{position:'right',grid:{display:false},ticks:{color:'#ffb454',callback:v=>fmt(v)},title:{display:true,text:'Reserva',color:'#ffb454'}},
+   y1:{position:'right',grid:{display:false},ticks:{color:'#9b6bff',callback:v=>fmt(v)},title:{display:true,text:'Reserva',color:'#9b6bff'}},
    x:{grid:{display:false},ticks:{color:'#9aa6c7'}}
   }}
 });

@@ -10,36 +10,31 @@ $saldoRow = rw_saldo_actual();
 $saldo = $saldoRow ? (float)$saldoRow['saldo'] : 0.0;
 $asof = $saldoRow ? date('d/m/Y', strtotime($saldoRow['fecha'])) : '—';
 $proj = rw_proyeccion($saldo, $vel['velocidad']);
-$MES=['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 
-// Reserva histórica mensual (12m) para la proyección
-$consumo = rw_consumo_mensual(); $cur = date('Y-m');
-$seq=[]; $d=new DateTime('first day of this month'); $d->modify('-12 month');
-for($i=0;$i<12;$i++){ $seq[]=$d->format('Y-m'); $d->modify('+1 month'); }
-$histRes=array_fill(0,12,0.0); $acc=$saldo+($consumo[$cur]??0); $histRes[11]=$acc;
-for($j=10;$j>=0;$j--){ $acc+=$consumo[$seq[$j+1]]??0; $histRes[$j]=$acc; }
-$histLabels=[]; foreach($seq as $m){ [$y,$mo]=explode('-',$m); $histLabels[]=$MES[(int)$mo].' '.substr($y,2); }
-
-// --- Serie SEMANAL (52 semanas): egresos, retiro de reserva, reserva ---
-$wkStart=(new DateTime('monday this week'))->modify('-51 week')->format('Y-m-d');
+// --- Serie SEMANAL: 52 históricas + 34 de proyección ---
+$histW=52; $fwdW=34; $totW=$histW+$fwdW;
+$wkStart=(new DateTime('monday this week'))->modify('-'.($histW-1).' week')->format('Y-m-d');
 $wq=db()->prepare("SELECT YEARWEEK(fecha,3) yw,
    SUM(CASE WHEN grupo_pnl='operativo' THEN monto_canonico ELSE 0 END) eg,
    SUM(CASE WHEN grupo_pnl='reserve_draw' THEN -monto_canonico ELSE 0 END) dr
    FROM transacciones WHERE fecha>=:s GROUP BY yw");
 $wq->execute([':s'=>$wkStart]);
 $byw=[]; foreach($wq as $r){ $byw[(int)$r['yw']]=['eg'=>(float)$r['eg'],'dr'=>(float)$r['dr']]; }
-$weeks=[]; $dt=new DateTime('monday this week'); $dt->modify('-51 week');
-for($i=0;$i<52;$i++){ $weeks[]=['lab'=>$dt->format('j').' '.$MES[(int)$dt->format('n')],'yw'=>(int)$dt->format('oW')]; $dt->modify('+1 week'); }
-$egW=[];$drW=[];
-foreach($weeks as $w){ $egW[]=isset($byw[$w['yw']])?round($byw[$w['yw']]['eg']):0; $drW[]=isset($byw[$w['yw']])?round($byw[$w['yw']]['dr']):0; }
-$resW=array_fill(0,52,0.0); $resW[51]=$saldo;
-for($j=50;$j>=0;$j--){ $resW[$j]=$resW[$j+1]+($drW[$j+1]??0); }
-$wLabels=array_map(fn($w)=>$w['lab'],$weeks);
+$dt=new DateTime('monday this week'); $dt->modify('-'.($histW-1).' week');
+$labels=[]; $eg=[]; $dr=[]; $prevM='';
+for($i=0;$i<$totW;$i++){
+  $yw=(int)$dt->format('oW'); $mk=$dt->format('m/y'); $mon=($mk!==$prevM)?$mk:''; $prevM=$mk;
+  $labels[]=[ (int)$dt->format('W'), $mon ];
+  if($i<$histW){ $eg[]=isset($byw[$yw])?round($byw[$yw]['eg']):0; $dr[]=isset($byw[$yw])?round($byw[$yw]['dr']):0; }
+  else { $eg[]=null; $dr[]=null; }
+  $dt->modify('+1 week');
+}
+$resH=array_fill(0,$histW,0.0); $resH[$histW-1]=$saldo;
+for($j=$histW-2;$j>=0;$j--){ $resH[$j]=$resH[$j+1]+($dr[$j+1]??0); }
 
 $conn = db()->query("SELECT estado, ultima_sync FROM qbo_oauth ORDER BY id DESC LIMIT 1")->fetch();
-$data = ['saldo'=>$saldo,'vel'=>$vel['velocidad'],'histLabels'=>$histLabels,'histRes'=>array_map(fn($v)=>round($v),$histRes),
-  'wLabels'=>$wLabels,'eg'=>$egW,'dr'=>$drW,'res'=>array_map(fn($v)=>round($v),$resW)];
-$hayDatos=!empty($consumo)||$saldo>0;
+$data=['saldo'=>$saldo,'vel'=>$vel['velocidad'],'velWeek'=>$vel['velocidad']/4.345,
+  'histW'=>$histW,'totW'=>$totW,'labels'=>$labels,'eg'=>$eg,'dr'=>$dr,'resH'=>array_map(fn($v)=>round($v),$resH)];
 function money($n){ return '$'.number_format((float)$n,0,',','.'); }
 $ml=$proj['meses_restantes']; $mlTxt=is_finite($ml)?number_format($ml,1,',','.'):'∞';
 $cls=!is_finite($ml)?'good':($ml<3?'bad':($ml<6?'warn':'good'));
@@ -48,12 +43,12 @@ $cls=!is_finite($ml)?'good':($ml<3?'bad':($ml<6?'warn':'good'));
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>KRATFEL · Finanzas</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b}
+:root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b;--violet:#9b6bff}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
 header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:1px solid var(--line)}
 .brand{font-weight:800;font-size:18px;display:inline-flex;align-items:center;gap:7px}.brand span{color:var(--mut);font-weight:400;font-size:14px}
 .who{margin-left:auto;color:var(--mut);font-size:13px}.who a{color:var(--mut)}
-.wrap{max-width:1100px;margin:0 auto;padding:22px}
+.wrap{max-width:1180px;margin:0 auto;padding:22px}
 .fresh{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;font-size:12.5px;color:var(--mut)}
 .chip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--good)}.dot.w{background:var(--warn)}.dot.b{background:var(--bad)}
@@ -66,18 +61,16 @@ header{display:flex;align-items:center;gap:16px;padding:14px 22px;border-bottom:
 .scen{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .scen button{background:var(--panel2);border:1px solid var(--line);color:var(--mut);padding:7px 12px;border-radius:999px;font-size:12.5px;cursor:pointer;font-weight:600}
 .scen button.active{border-color:var(--acc);color:var(--txt);background:#1d2748}
-.banner{background:#2a2140;border:1px solid #4a3a6a;border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:16px}
 .legend{display:flex;gap:16px;font-size:12px;color:var(--mut);margin-top:8px;flex-wrap:wrap}
-.legend i{display:inline-block;width:18px;height:0;border-top:3px solid var(--acc);vertical-align:middle;margin-right:6px}
-.legend i.d{border-top-style:dashed;border-color:#7aa2ff}.legend i.b{height:12px;width:12px;border:0;border-radius:3px;vertical-align:middle}
-nav{display:flex;gap:6px;margin-left:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:6px}
+.legend i.l{height:0;width:18px;border-top:3px solid var(--violet);border-radius:0}.legend i.d{height:0;width:18px;border-top:3px dashed var(--violet);border-radius:0}
+nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600}
 </style></head>
 <body>
 <header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
-<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540;padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;font-weight:600">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Reportes</a><a href="/forecast.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Forecast</a><a href="/flujo.php" style="color:#9aa6c7;padding:8px 14px;text-decoration:none;font-size:14px;font-weight:600">Flujo</a></nav>
+<nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Forecast</a><a href="/flujo.php" style="color:#9aa6c7">Flujo</a></nav>
 <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
-<?php if(!$hayDatos): ?><div class="banner"><b>Sin datos todavía.</b></div><?php endif; ?>
 <div class="fresh">
   <div class="chip"><span class="dot <?= ($conn && $conn['estado']==='conectado')?'':'b' ?>"></span>QBO: <b><?= $conn?htmlspecialchars($conn['estado']):'no conectado' ?></b><?php if($conn&&$conn['ultima_sync']): ?> · última sync <?= date('d/m/Y',strtotime($conn['ultima_sync'])) ?><?php endif; ?></div>
   <div class="chip"><span class="dot w"></span>Saldo Cetera al: <b><?= $asof ?></b></div>
@@ -90,17 +83,11 @@ nav{display:flex;gap:6px;margin-left:8px}
   <div class="kpi <?= $cls ?>"><div class="lbl">Fecha estimada de cero</div><div class="val" id="kCero"><?= htmlspecialchars($proj['fecha_cero']??'—') ?></div></div>
 </div>
 <div class="card">
-  <h3>Reserva: historial y proyección de oxígeno</h3>
-  <p class="cap">Línea sólida = reserva real de los últimos 12 meses. Punteada = proyección al ritmo de consumo. Cambia el escenario para mover la fecha de cero.</p>
+  <h3>Egresos, retiro de reserva y proyección · por semana</h3>
+  <p class="cap">Barras = egresos y retiro de reserva por semana (histórico). Línea morada = reserva real (sólida) y proyección (punteada). Arriba el nº de semana; abajo el mes (MM/AA). Cambia el escenario para mover la fecha de cero.</p>
   <div class="scen" id="scen"></div>
-  <div style="height:300px"><canvas id="chart"></canvas></div>
-  <div class="legend"><span><i></i>Reserva (real)</span><span><i class="d"></i>Proyección</span></div>
-</div>
-<div class="card">
-  <h3>Egresos y reserva · por semana (52 semanas)</h3>
-  <p class="cap">Detalle semanal: egresos operativos y retiro de reserva (barras), reserva (línea). Sin ventas, cada semana se cubre retirando de Cetera.</p>
-  <div style="height:330px"><canvas id="chartW"></canvas></div>
-  <div class="legend"><span><i class="b" style="background:#ff6b6b"></i>Egresos operativos</span><span><i class="b" style="background:#64748b"></i>Retiro de reserva</span><span><i style="border-color:#ffb454"></i>Reserva (saldo, eje der.)</span></div>
+  <div style="height:380px"><canvas id="chart"></canvas></div>
+  <div class="legend"><span><i style="background:#ff6b6b"></i>Egresos operativos</span><span><i style="background:#64748b"></i>Retiro de reserva</span><span><i class="l"></i>Reserva real</span><span><i class="d"></i>Proyección</span></div>
 </div>
 </div>
 <script>
@@ -111,33 +98,37 @@ const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte �
 let cur='base';
 const scEl=document.getElementById('scen');
 scen.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;if(s.id==='base')b.classList.add('active');b.onclick=()=>{cur=s.id;[...scEl.children].forEach(x=>x.classList.remove('active'));b.classList.add('active');render();};scEl.appendChild(b);});
-function project(s){const v=D.vel*s.mult;let bal=D.saldo;const lbl=['hoy'],val=[Math.round(bal)];let cero=null,b2=bal,ml=0;
- for(let i=1;i<=12;i++){if(i===s.im&&s.inc)bal+=s.inc;bal-=v;const d=new Date(new Date().getFullYear(),(new Date().getMonth())+i,1);lbl.push(MESJS[d.getMonth()]+' '+String(d.getFullYear()%100));val.push(Math.round(bal));if(bal<=0&&cero===null)cero=lbl[i];}
- for(let i=1;i<=600;i++){if(i===s.im&&s.inc)b2+=s.inc;if(v<=0){ml=Infinity;break;}if(b2-v<=0){ml=(i-1)+(b2/v);break;}b2-=v;ml=i;}
- return {v,lbl,val,cero,ml};}
+// KPIs mensuales
+function monthly(s){const v=D.vel*s.mult;let b=D.saldo,ml=0,cero=null;
+ for(let i=1;i<=600;i++){if(i===s.im&&s.inc)b+=s.inc;if(v<=0){ml=Infinity;break;}if(b-v<=0){ml=(i-1)+(b/v);const d=new Date(new Date().getFullYear(),(new Date().getMonth())+i,1);cero=MESJS[d.getMonth()]+' '+String(d.getFullYear()%100);break;}b-=v;ml=i;}
+ return {v,ml,cero};}
+// proyección semanal de la reserva
+function weeklyForward(s){const vw=D.velWeek*s.mult;const arr=Array(D.totW).fill(null);let bal=D.saldo;arr[D.histW-1]=Math.round(bal);
+ const ordWeek=D.histW-1+Math.round(s.im*4.345);
+ for(let k=D.histW;k<D.totW;k++){ if(k===ordWeek&&s.inc)bal+=s.inc; bal-=vw; arr[k]=Math.round(bal);} return arr;}
 let chart;
-function render(){const s=scen.find(x=>x.id===cur),p=project(s);
- document.getElementById('kVel').textContent=fmt(p.v);
- document.getElementById('kMeses').textContent=isFinite(p.ml)?p.ml.toFixed(1):'∞';
- document.getElementById('kCero').textContent=p.cero||'—';
- const nh=D.histLabels.length, labels=[...D.histLabels,...p.lbl];
- const solid=[...D.histRes,D.saldo,...Array(p.lbl.length-1).fill(null)];
- const dashed=[...Array(nh).fill(null),...p.val];
- const ds=[{label:'Reserva (real)',data:solid,borderColor:'#5b8cff',backgroundColor:'#5b8cff',pointRadius:2,tension:.2},
-           {label:'Proyección',data:dashed,borderColor:'#7aa2ff',borderDash:[6,5],pointRadius:0,tension:.15}];
- if(cur!=='base'){const bp=project(scen[0]);ds.push({label:'Base',data:[...Array(nh).fill(null),...bp.val],borderColor:'#41507a',borderDash:[2,4],pointRadius:0});}
+function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
+ document.getElementById('kVel').textContent=fmt(mo.v);
+ document.getElementById('kMeses').textContent=isFinite(mo.ml)?mo.ml.toFixed(1):'∞';
+ document.getElementById('kCero').textContent=mo.cero||'—';
+ const solid=[...D.resH, ...Array(D.totW-D.histW).fill(null)];
+ const dotted=weeklyForward(s);
+ const ds=[
+  {type:'bar',label:'Egresos operativos',data:D.eg,backgroundColor:'#ff6b6b',yAxisID:'y',order:3},
+  {type:'bar',label:'Retiro de reserva',data:D.dr,backgroundColor:'#64748b',yAxisID:'y',order:3},
+  {type:'line',label:'Reserva real',data:solid,borderColor:'#9b6bff',backgroundColor:'#9b6bff',yAxisID:'y1',pointRadius:0,borderWidth:2,tension:.2,order:1},
+  {type:'line',label:'Proyección',data:dotted,borderColor:'#9b6bff',borderDash:[6,5],yAxisID:'y1',pointRadius:0,borderWidth:2,tension:.15,order:2},
+ ];
  if(chart)chart.destroy();
- chart=new Chart(document.getElementById('chart'),{type:'line',data:{labels,datasets:ds},options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},scales:{y:{grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)}},x:{grid:{display:false},ticks:{color:'#9aa6c7',maxRotation:0,autoSkip:true,maxTicksLimit:13}}}}});
+ chart=new Chart(document.getElementById('chart'),{data:{labels:D.labels,datasets:ds},options:{maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{title:items=>{const i=items[0].dataIndex;const l=D.labels[i];return 'Semana '+l[0]+(l[1]?' · '+l[1]:'');},label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},
+  scales:{
+   y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)},title:{display:true,text:'Semanal',color:'#9aa6c7'}},
+   y1:{position:'right',grid:{display:false},ticks:{color:'#9b6bff',callback:v=>fmt(v)},title:{display:true,text:'Reserva',color:'#9b6bff'}},
+   x:{grid:{display:false},ticks:{color:'#9aa6c7',font:{size:8},autoSkip:false,maxRotation:0,minRotation:0,
+      callback:function(val,idx){const l=D.labels[idx];return l[1]? [String(l[0]), l[1]] : String(l[0]);}}}
+  }}});
 }
 render();
-// --- gráfica semanal ---
-new Chart(document.getElementById('chartW'),{data:{labels:D.wLabels,datasets:[
-  {type:'bar',label:'Egresos operativos',data:D.eg,backgroundColor:'#ff6b6b',yAxisID:'y',order:2},
-  {type:'bar',label:'Retiro de reserva',data:D.dr,backgroundColor:'#64748b',yAxisID:'y',order:2},
-  {type:'line',label:'Reserva',data:D.res,borderColor:'#ffb454',backgroundColor:'#ffb454',yAxisID:'y1',tension:.2,pointRadius:0,borderWidth:2,order:1},
-]},options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},
- scales:{y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)}},
-  y1:{position:'right',grid:{display:false},ticks:{color:'#ffb454',callback:v=>fmt(v)}},
-  x:{grid:{display:false},ticks:{color:'#9aa6c7',maxRotation:0,autoSkip:true,maxTicksLimit:14}}}}});
 </script>
 </body></html>

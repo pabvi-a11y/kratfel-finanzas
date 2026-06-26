@@ -92,7 +92,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
    <div style="margin-left:auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
      <span class="muted">Base de gasto:</span>
      <div class="seg" id="base"><button data-b="avg3" class="active">Prom 3 meses</button><button data-b="last">Último mes</button></div>
-     <div class="seg" id="seg"><button data-m="3" class="active">3m</button><button data-m="6">6m</button><button data-m="12">12m</button></div>
+     <div class="seg" id="seg"><button data-m="6" class="active">6m</button><button data-m="12">12m</button><button data-m="18">18m</button></div>
    </div>
  </div>
  <div class="card"><table id="grid"></table></div>
@@ -102,7 +102,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt = n => (n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-let months=3, base='avg3';
+let months=6, base='avg3';
 let state={
   start:D.saldo, income:0, order:{amount:0,month:1},
   cats:D.cats.map(c=>({...c, v:c.avg3, mode:'avg3'})),

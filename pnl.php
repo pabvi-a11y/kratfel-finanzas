@@ -33,7 +33,7 @@ $sr=rw_saldo_actual(); $cetera=$sr?(float)$sr['saldo']:0.0; $ceteraFecha=$sr?dat
 $qboCetera=547554.65;
 $bs=db()->query("SELECT seccion,grupo,cuenta,monto FROM bs_lineas ORDER BY seccion,orden")->fetchAll();
 $act=[];$cards=[];
-foreach($bs as $r){ if($r['seccion']==='activo')$act[$r['grupo']][]=$r; elseif($r['seccion']==='pasivo')$cards[]=$r; }
+foreach($bs as $r){ if((float)$r['monto']==0) continue; if($r['seccion']==='activo')$act[$r['grupo']][]=$r; elseif($r['seccion']==='pasivo')$cards[]=$r; }
 // agrupar tarjetas por familia
 $ccG=['NSCC 1433'=>[],'NSCC 7403'=>[],'Otras'=>[]];
 foreach($cards as $r){ $c=$r['cuenta'];
@@ -92,7 +92,6 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
  <div class="card"><table class="pnl sortable" id="tpnl">
   <thead><tr>
    <th data-type="text">Categoría <span class="ar">↕</span></th>
-   <th data-type="text">Grupo <span class="ar">↕</span></th>
    <?php foreach($cols as $ym): ?><th data-type="num" class="<?= $ym===$curM?'cur':'' ?>"><?= lbl($ym) ?><?= $ym===$curM?'·hoy':'' ?> <span class="ar">↕</span></th><?php endforeach; ?>
    <th data-type="num">Total <span class="ar">↕</span></th>
   </tr></thead>
@@ -100,14 +99,13 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
   <?php foreach($rows as $r): ?>
    <tr>
     <td><?= htmlspecialchars($r['cat']) ?></td>
-    <td class="grp" data-v="<?= htmlspecialchars($r['grupo']) ?>"><?= htmlspecialchars($r['grupo']) ?></td>
     <?php foreach($cols as $ym){ $v=$r['vals'][$ym]; echo '<td data-v="'.$v.'" class="'.($v==0?'v0':'').'">'.($v==0?'·':f($v)).'</td>'; } ?>
     <td data-v="<?= $r['total'] ?>"><strong><?= f($r['total']) ?></strong></td>
    </tr>
   <?php endforeach; ?>
   </tbody>
   <tfoot><tr class="tot noSort">
-    <td>TOTAL GASTOS</td><td></td>
+    <td>TOTAL GASTOS</td>
     <?php foreach($cols as $ym)echo '<td>'.f($colTot[$ym]).'</td>'; ?>
     <td><?= f($grand) ?></td>
   </tr></tfoot>
@@ -121,7 +119,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
    <table>
     <tr class="sec"><td colspan="2">Activos</td></tr>
     <tr class="grp"><td colspan="2">Bancos y reserva</td></tr>
-    <tr class="it"><td>Cetera (reserva, valor real) <span class="note">· QBO: $<?= number_format($qboCetera,0,',','.') ?></span></td><td class="num"><?= m2($cetera) ?></td></tr>
+    <tr class="it"><td>Cetera (reserva, valor real)</td><td class="num"><?= m2($cetera) ?></td></tr>
     <?php foreach(($act['Bank Accounts']??[]) as $r): ?><tr class="it"><td><?= htmlspecialchars($r['cuenta']) ?></td><td class="num"><?= m2($r['monto']) ?></td></tr><?php endforeach; ?>
     <?php foreach(['Other Current Assets'=>'Otros activos corrientes','Other Assets'=>'Otros activos'] as $gk=>$gl): if(empty($act[$gk]))continue; ?>
       <tr class="grp"><td colspan="2"><?= $gl ?></td></tr>
