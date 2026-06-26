@@ -44,7 +44,7 @@ $data=['saldo'=>$saldo,'asof'=>$asof,'cats'=>$cats,'eventos'=>$eventos,'mes0'=>(
 ?>
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="/assets/favicon.png"><title>Forecast — KRATFEL Finanzas</title>
+<link rel="icon" type="image/png" href="/assets/favicon.png"><title>Proyección — KRATFEL Finanzas</title>
 <style>
 :root{--bg:#0f1320;--panel:#171c2e;--panel2:#1e2540;--line:#2a3252;--txt:#e8ecf7;--mut:#9aa6c7;--acc:#5b8cff;--good:#37d39b;--warn:#ffb454;--bad:#ff6b6b;--yellow:#3a3520;--yellowbd:#7a6a2a}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--txt)}
@@ -84,17 +84,17 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
- <nav><a href="/">Dashboard</a><a href="/pnl.php">Reportes</a><a class="active" href="/forecast.php">Forecast</a></nav>
+ <nav><a href="/">Dashboard</a><a href="/pnl.php">Reportes</a><a class="active" href="/forecast.php">Proyección</a></nav>
  <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/settings.php">Ajustes</a> · <a href="/auth/logout.php">Salir</a></div>
 </header>
 <div class="wrap">
  <div class="toolbar">
-   <h2>Forecast de reserva</h2>
+   <h2>Proyección de reserva</h2>
    <span class="muted">Reserva Cetera hoy: <b><?= '$'.number_format($saldo,0,'.',',') ?></b> · al <?= $asof ?></span>
    <div style="margin-left:auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
      <span class="muted">Base de gasto:</span>
      <div class="seg" id="base"><button data-b="avg3" class="active">Prom 3 meses</button><button data-b="last">Último mes</button></div>
-     <div class="seg" id="seg"><button data-m="6" class="active">6m</button><button data-m="12">12m</button><button data-m="18">18m</button></div><div class="rtbar" data-target="#grid" data-name="Forecast_KRATFEL" data-title="Forecast de reserva"><button data-act="email" title="Enviar por correo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></button><button data-act="print" title="Imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="13" width="12" height="8"/><path d="M6 17H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/></svg></button><span class="rtexp"><button data-act="export" title="Exportar"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg></button><div class="rtmenu"><a href="#" data-fmt="xlsx">Exportar a Excel</a><a href="#" data-fmt="pdf">Exportar a PDF</a><a href="#" data-fmt="csv">Exportar a CSV</a></div></span></div>
+     <div class="seg" id="seg"><button data-m="6" class="active">6m</button><button data-m="12">12m</button><button data-m="18">18m</button></div><div class="rtbar" data-target="#grid" data-name="Forecast_KRATFEL" data-title="Proyección de reserva"><button data-act="email" title="Enviar por correo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></button><button data-act="print" title="Imprimir"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="6" y="13" width="12" height="8"/><path d="M6 17H4a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2"/></svg></button><span class="rtexp"><button data-act="export" title="Exportar"><svg viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg></button><div class="rtmenu"><a href="#" data-fmt="xlsx">Exportar a Excel</a><a href="#" data-fmt="pdf">Exportar a PDF</a><a href="#" data-fmt="csv">Exportar a CSV</a></div></span></div>
    </div>
  </div>
  <div class="card"><table id="grid"></table></div>

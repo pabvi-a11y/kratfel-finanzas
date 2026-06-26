@@ -84,7 +84,7 @@ h2{font-size:18px;margin:24px 0 12px}h2:first-child{margin-top:6px}
 <body>
 <header>
  <a class="brand" href="/"><img src="/assets/logo_kratfel.png" alt="Kratfel"><span class="tag">Finanzas</span></a><span class="hdiv"></span>
- <nav><a href="/">Dashboard</a><a class="active" href="/pnl.php">Reportes</a><a href="/forecast.php">Forecast</a></nav>
+ <nav><a href="/">Dashboard</a><a class="active" href="/pnl.php">Reportes</a><a href="/forecast.php">Proyección</a></nav>
  <div class="who"><?= htmlspecialchars($user['nombre']??$user['email']) ?> · <a href="/settings.php">Ajustes</a> · <a href="/auth/logout.php">Salir</a></div>
 </header>
 <div class="wrap">
