@@ -1,9 +1,9 @@
 name: Deploy a SiteGround
 
 # Despliega al hacer push a main. NADA toca el Mac de Pablo.
+# Desactivado el auto-deploy: el deploy real es por SSH/rsync.
+# Para reactivarlo, configura los 5 secrets SG_* (ver abajo) y vuelve a poner el trigger push.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
