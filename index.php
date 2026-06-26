@@ -69,12 +69,10 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 <body>
 <header><div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px;vertical-align:middle"> <span>· Finanzas</span></div>
 <nav style="display:flex;gap:6px;margin-left:8px"><a href="/" style="color:#e8ecf7;background:#1e2540">Dashboard</a><a href="/pnl.php" style="color:#9aa6c7">Reportes</a><a href="/forecast.php" style="color:#9aa6c7">Forecast</a></nav>
-<div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div></header>
+<div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/settings.php">Ajustes</a> · <a href="/auth/logout.php">Salir</a></div></header>
 <div class="wrap">
 <div class="fresh">
-  <div class="chip"><span class="dot <?= ($conn && $conn['estado']==='conectado')?'':'b' ?>"></span>QBO: <b><?= $conn?htmlspecialchars($conn['estado']):'no conectado' ?></b><?php if($conn&&$conn['ultima_sync']): ?> · última sync <?= date('d/m/Y',strtotime($conn['ultima_sync'])) ?><?php endif; ?></div>
   <div class="chip"><span class="dot w"></span>Saldo Cetera al: <b><?= $asof ?></b></div>
-  <?php if(!$conn||$conn['estado']!=='conectado'): ?><div class="chip"><a href="/qbo/connect.php" style="color:var(--acc);font-weight:700">Conectar con QuickBooks →</a></div><?php endif; ?>
 </div>
 <div class="kpis">
   <div class="kpi"><div class="lbl">Reserva Cetera hoy</div><div class="val"><?= money($saldo) ?></div></div>
@@ -94,7 +92,7 @@ nav a{padding:8px 14px;border-radius:10px;text-decoration:none;font-size:14px;fo
 const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt=n=>(n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('es-ES');
 const MESJS=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-const monthSep={id:'monthSep',beforeDatasetsDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;D.labels.forEach((l,i)=>{if(!l[1])return;const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.restore();}};
+const monthSep={id:'monthSep',afterDraw(c){const x=c.scales.x,a=c.chartArea,ctx=c.ctx;const half=(x.getPixelForValue(1)-x.getPixelForValue(0))/2;const starts=[];D.labels.forEach((l,i)=>{if(l[1])starts.push(i);});ctx.save();ctx.strokeStyle='rgba(154,166,199,.16)';ctx.lineWidth=1;starts.forEach(i=>{const px=x.getPixelForValue(i)-half;ctx.beginPath();ctx.moveTo(px,a.top);ctx.lineTo(px,a.bottom);ctx.stroke();});ctx.fillStyle='#9aa6c7';ctx.font='10px -apple-system,Segoe UI,sans-serif';ctx.textAlign='center';ctx.textBaseline='top';for(let k=0;k<starts.length;k++){const i=starts[k];const left=x.getPixelForValue(i)-half;const right=(k+1<starts.length)?x.getPixelForValue(starts[k+1])-half:a.right;if(right-left<26)continue;ctx.fillText(D.labels[i][1],(left+right)/2,a.bottom+8);}ctx.restore();}};
 const scen=[{id:'base',name:'Base',mult:1,inc:0,im:0},{id:'c20',name:'Recorte −20%',mult:.8,inc:0,im:0},{id:'c35',name:'Austeridad −35%',mult:.65,inc:0,im:0},{id:'ord',name:'Orden $120k (mes 3)',mult:1,inc:120000,im:3}];
 let cur='base';
 const scEl=document.getElementById('scen');
@@ -121,7 +119,7 @@ function render(){const s=scen.find(x=>x.id===cur);const mo=monthly(s);
   {type:'line',label:'Proyección',data:dotted,borderColor:'#9b6bff',borderDash:[6,5],yAxisID:'y1',pointRadius:0,borderWidth:2,tension:.15,order:2},
  ];
  if(chart)chart.destroy();
- chart=new Chart(document.getElementById('chart'),{data:{labels:D.labels,datasets:ds},plugins:[monthSep],options:{maintainAspectRatio:false,
+ chart=new Chart(document.getElementById('chart'),{data:{labels:D.labels,datasets:ds},plugins:[monthSep],options:{maintainAspectRatio:false,layout:{padding:{bottom:22}},
   plugins:{legend:{display:false},tooltip:{callbacks:{title:items=>{const i=items[0].dataIndex;const l=D.labels[i];return 'Semana '+l[0]+(l[1]?' · '+l[1]:'');},label:c=>c.dataset.label+': '+fmt(c.parsed.y)}}},
   scales:{
    y:{position:'left',grid:{color:'#222a45'},ticks:{color:'#9aa6c7',callback:v=>fmt(v)},title:{display:true,text:'Semanal',color:'#9aa6c7'}},

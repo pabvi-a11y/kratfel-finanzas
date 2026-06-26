@@ -83,7 +83,7 @@ thead th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing
 <header>
  <div class="brand"><img src="/assets/logo_kratfel.png" alt="Kratfel" style="height:24px"> <span>· Finanzas</span></div>
  <nav><a href="/">Dashboard</a><a href="/pnl.php">Reportes</a><a class="active" href="/forecast.php">Forecast</a></nav>
- <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/auth/logout.php">Salir</a></div>
+ <div class="who"><?= htmlspecialchars($user['nombre'] ?? $user['email']) ?> · <a href="/settings.php">Ajustes</a> · <a href="/auth/logout.php">Salir</a></div>
 </header>
 <div class="wrap">
  <div class="toolbar">
