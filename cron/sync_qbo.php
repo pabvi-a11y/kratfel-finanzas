@@ -22,6 +22,10 @@ function logln(string $m): void { fwrite(STDOUT, '[' . date('c') . "] $m\n"); }
 try {
     $pdo = db();
 
+    // Si QBO aún no está conectado, salir limpio (sin error) — datos llegan por xlsx mientras tanto.
+    $c = $pdo->query("SELECT estado FROM qbo_oauth ORDER BY id DESC LIMIT 1")->fetch();
+    if (!$c || $c['estado'] !== 'conectado') { logln('QBO no conectado aún; nada que sincronizar.'); exit(0); }
+
     // Fecha de inicio: desde la última transacción (con solape de 5 días por seguridad).
     $last = $pdo->query("SELECT MAX(fecha) m FROM transacciones")->fetch()['m'] ?? null;
     $start = $last ? (new DateTime($last))->modify('-5 days')->format('Y-m-d') : '2025-01-01';
