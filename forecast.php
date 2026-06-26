@@ -32,8 +32,9 @@ foreach ($q as $r) {
         if($ym===$m1) $grp[$g]['last']+=$v;
     }
 }
+$T=['Shipbuilding Expenses'=>'Construcción','Meals'=>'Comidas','Travel'=>'Viajes','Office expenses'=>'Oficina','General business expenses'=>'Gastos generales','Legal & accounting services'=>'Legal y contabilidad','Business licenses'=>'Licencias','Contract labor'=>'Contratistas','Contributions to charities'=>'Donativos','Insurance'=>'Seguros','Utilities'=>'Servicios','Vehicle expenses'=>'Vehículos'];
 $cats=[];
-foreach($op as $c=>$d){ $a3=round($d['sum3']/3); if($a3>0||round($d['last'])>0) $cats[]=['n'=>$c,'avg3'=>$a3,'last'=>round($d['last'])]; }
+foreach($op as $c=>$d){ $a3=round($d['sum3']/3); if($a3>0||round($d['last'])>0) $cats[]=['n'=>($T[$c]??$c),'avg3'=>$a3,'last'=>round($d['last'])]; }
 usort($cats, fn($a,$b)=>$b['avg3']<=>$a['avg3']);
 $eventos=[
   ['n'=>'Distribuciones a socios','avg3'=>round($grp['distribucion']['sum3']/3),'last'=>round($grp['distribucion']['last'])],
@@ -104,6 +105,7 @@ const D = <?= json_encode($data, JSON_UNESCAPED_UNICODE) ?>;
 const fmt = n => (n<0?'-':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 const MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
 let months=6, base='avg3';
+const sortDir={cat:1,ev:1};
 let state={
   start:D.saldo, income:0, order:{amount:0,month:1},
   cats:D.cats.map(c=>({...c, v:c.avg3, mode:'avg3'})),
@@ -143,9 +145,9 @@ function render(){
   h+='<tr><td>Orden puntual <span class="muted">(mes <input class="cell-edit" id="edOrderM" style="width:46px" value="'+state.order.month+'">)</span></td>';
   for(let i=0;i<months;i++){const on=(i+1===+state.order.month);h+= i===0?'<td><input class="cell-edit" id="edOrderA" value="'+state.order.amount+'"></td>':'<td>'+(on?fmt(+state.order.amount):'—')+'</td>';} h+='</tr>';
   h+='<tr class="tot"><td>Total ingresos</td>'; c.inc.forEach(v=>h+='<td class="'+(v>0?'pos':'')+'">'+fmt(v)+'</td>'); h+='</tr>';
-  h+='<tr class="sect"><td>Gastos operativos</td>'+'<td></td>'.repeat(months)+'</tr>';
+  h+='<tr class="sect"><td id="secCat" style="cursor:pointer">Gastos operativos <span style="opacity:.55">↕</span></td>'+'<td></td>'.repeat(months)+'</tr>';
   state.cats.forEach((cat,idx)=>h+=rowCat(state.cats,'cat',cat,idx));
-  h+='<tr class="sect"><td>Eventos (impuestos / distribuciones)</td>'+'<td></td>'.repeat(months)+'</tr>';
+  h+='<tr class="sect"><td id="secEv" style="cursor:pointer">Eventos (impuestos / distribuciones) <span style="opacity:.55">↕</span></td>'+'<td></td>'.repeat(months)+'</tr>';
   state.eventos.forEach((cat,idx)=>h+=rowCat(state.eventos,'ev',cat,idx));
   h+='<tr class="tot"><td>Total gastos</td>'; c.exp.forEach(v=>h+='<td class="neg">'+fmt(v)+'</td>'); h+='</tr>';
   h+='<tr class="tot"><td>Flujo neto</td>'; c.net.forEach(v=>h+='<td class="'+(v<0?'neg':'pos')+'">'+fmt(v)+'</td>'); h+='</tr>';
@@ -162,6 +164,8 @@ function render(){
     const k=e.target.dataset.set, i=+e.target.dataset.i, to=e.target.dataset.to;
     const arr= k==='cat'?state.cats:state.eventos; arr[i].v=arr[i][to]; arr[i].mode=to; render();
   });
+  const sc=document.getElementById('secCat'); if(sc) sc.onclick=()=>{state.cats.sort((a,b)=>(b.v-a.v)*sortDir.cat); sortDir.cat*=-1; render();};
+  const se=document.getElementById('secEv'); if(se) se.onclick=()=>{state.eventos.sort((a,b)=>(b.v-a.v)*sortDir.ev); sortDir.ev*=-1; render();};
 }
 document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#seg button').forEach(x=>x.classList.remove('active'));b.classList.add('active');months=+b.dataset.m;render();});
 document.querySelectorAll('#base button').forEach(b=>b.onclick=()=>{
